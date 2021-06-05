@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "novellastaticresources",
+  "private_key_id": "8659387afc84fd2b67f51236458a436c463ce450",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDRGM0iDlRrN3Tz\njJLIi2/CJ9brkOFo0j7FJpA8rzEWFk6CqnBk2eV2ne7eOHq3v/wTHynsEBNWUsI2\n7AO2TeaARmLaWLXlC9FzTVKj9BLo05FlFb75YPHnJhbxCWYoyCgI941aGTAwc2B7\nYCNSNrovgwJJQkUsF4ilLpwBbTqVOz+tEHFZTaHdH0dN+gYCHvjXtbU6iv5VBe0c\nTJhHiWR4zfMUvGj2Ryojk7Db1aJ8F80tyxhunL1QFLK0pP9o9h4P+tkW+DZvAAPU\nUECxV5jf+Qh7XhCDZPvDVXceV8YgK0qb86f5oPxOxP0tUb2Lt4hYK4Lcd7Hqx7l3\nv62LXtKZAgMBAAECggEAGeelXQzCxK263YQ9mH7oj6NOlcyolctGX40m3X3O6lpF\nIRxrOZ4NNvmGDciYMN+mI9r+ifJ2ktaZ8nf3AG+nmPN0wnGvHKYELZwXcEcyzd7i\n6npxOIVxiB5ImqrRb0gCPb99pvtBOcocL+zPM3D4TB6XpT/X613XCK/nlVL/qQZ+\noOGdC0Yqgp9pV4OepCWcRi8MbF4RkNaBfC0pnab01oVzh9C3fcYF32YQvYkqAXP9\nXVZ8MFw+NRws9U9EK3gpL/q4WS53ZgzNf6usCjNj//KaLiB+hcr7J7gs9HXxtvtE\noMoW7u5fQrtR/ztAwZQ1xo+nKsz93XVJSqSuOQbjyQKBgQD5TvH/+hXC5eUbRO84\n2hDOTfXsMd6UIIAzp2vvqRK4y7SCd64vZgddNcaa2GXFl6IeUtwTkAwsonoJ6iH2\n+YU9Hkb28o9a4++vkcFcZgdkNcmpFDpYxugLJQczg3M1hxX4lfvakJuIF4hD9iCv\n65SbAYhY87ee3JQyMZxzv0MyGwKBgQDWtY25VjRjcxlsnveQOjrBwswVcC4xcbVt\n3nCGT157fogLXQAfFYetphACNE+cqFJ9u24DtSnCrwAZQ15ZS9gQrPiLcE6w0JHj\naS040ZsNBXR7ULCtTSlwwQJsqFvzopMCkRNIs37Lj2r8cMR3I8C+NXGxErjH1R4F\nxfW2Ljw5WwKBgElmW8twdr2177kSl5fWZAJJY7ERkaVs2DHdBeM+lPuBRfjvgYIE\n+QARWBK4yWXeWeWxoYfE7kCp6WJH444SMo8m/d+w1FH/L88yC4rHoz92spOsF+2R\nSjoVwcQB3IaS6f4RMmBMGO59dyoDKeaBZnQohFskDhigeqU4hAZz9jWnAoGARcQC\nhBl1tmbc+QWCbbPuCa2xQLoN2HUZPdUMfSfnDHul2wNiGbeWOZ9/DihPQhkTjNVN\nPxkrs53Hi23vh1Z0o56AuFZKy3tKHDm9vvukxQtjuPoUHou3DnM4xXPDRRwrZqcb\nPAFPDvfQDKzbuda9N1EIW0A5GH2wXrHfUE4ftYcCgYEAvLCtmoksm4jmL94mwL1p\nvj3blraRh4eDp21XHhf/pAuOIgWO9lUYB+lyK34L4gWJ0gei1gLePYCEnWmlLOCp\n1Ktw4z5rouAeFWSGtLJkB/y1OYY3/PIPt/vEsNXqDSu2wimBn/EbRsX2w4PFZnIK\nqLglnw1PCVXsR2JWuS8eXys=\n-----END PRIVATE KEY-----\n",
+  "client_email": "sample@novellastaticresources.iam.gserviceaccount.com",
+  "client_id": "110796571136576886338",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sample%40novellastaticresources.iam.gserviceaccount.com"
+}
