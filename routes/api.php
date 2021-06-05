@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Models\Users;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,7 @@ Route::group([
 
     Route::get('/user_intermediaries/showServersByUserId/{user_id}',"App\Http\Controllers\UserIntermediariesController@showUserId");
 
-    Route::get('users/check',"App\Http\Controllers\UsersController@showUserByEmail");
+    Route::get('users/check',"App\Http\Controllers\UsersController@checkAuthorize");
 
     Route::apiResource('chats','App\Http\Controllers\ChatController')->names('chat');
 
@@ -41,67 +42,138 @@ Route::group([
 
     Route::post('/upload', function(Request $request) {
 
-    $filename =  $request->thing->getClientOriginalName();
-    $id = $request->user_id;
-    $path = $request->file('thing')->storeAs(
-    'avatars', $id, 'public');
-    // dd($request->file('thing'));
-   
-    Storage::disk('google')->put($id, file_get_contents(__DIR__ . '\..\storage\app\public\avatars\\' . $id));
-    Storage::disk('public')->delete('avatars\\' . $id);
-    return response()->json($request->thing->getClientOriginalName());
+        $user = Users::find($request->user_id);
 
-    
- });
-
-
-Route::get('/upload/{user_id}', function($user_id) {
-
-    $files = Storage::disk('google')->files();
-    
-    foreach ($files as $value) {
-        $detail = Storage::disk('google')->getMetadata($value);
-        if($detail['filename'] === $user_id){
-            $url = Storage::disk('google')->url($value);
-            return response()->json(['user_id'=>$user_id,'dowloand'=>$url]);
+        if(is_null($user)){
+            return response()->json(['error'=>true,'message'=>'Not Found'],404);
         }
-    }
-    
-});
+        $file = $request->file('avatar');
 
-Route::put('/upload/{user_id}', function(Request $request,$user_id) {
-
-    $files = Storage::disk('google')->files();
-    foreach ($files as $value) {
-        $detail = Storage::disk('google')->getMetadata($value);
-        if($detail['filename'] === $user_id){
-            $url = Storage::disk('google')->url($value);
-            Storage::disk('google')->delete($value);
+        if(is_null($file)){
+            return response()->json(['error'=>true,'message'=>'Bad request'],400);
         }
-    }
 
-    $filename =  $request->thing->getClientOriginalName();
-    $id = $user_id;
-    $path = $request->file('thing')->storeAs(
-    'avatars', $id, 'public');
+        $mimeType = $file->file('avatar')->getClientMimetype();
 
-    Storage::disk('google')->put($id, file_get_contents(__DIR__ . '\..\storage\app\public\avatars\\' . $id));
-    Storage::disk('public')->delete('avatars\\' . $id);
+            if( str_starts_with  ( $mimeType,'image') !== true){
+                return response()->json(['error'=>true, 'message' => 'bad request'],400);
+            }
+
+        $filename =  $request->avatar->getClientOriginalName();
+        $id = $request->user_id;
+        $path = $file->storeAs(
+        'avatars', $id, 'public');
+        // dd($request->file('avatar'));
+       
+        Storage::disk('google')->put($id, file_get_contents(__DIR__ . '\..\storage\app\public\avatars\\' . $id));
+        Storage::disk('public')->delete('avatars\\' . $id);
+        return response()->json(['user_id'=>$id,'name'=>$filename],201);
+
     
-});
+    });
 
-Route::delete('/upload/{user_id}', function($user_id) {
-    $files = Storage::disk('google')->files();
-    foreach ($files as $value) {
-        $detail = Storage::disk('google')->getMetadata($value);
-        if($detail['filename'] === $user_id){
-            $url = Storage::disk('google')->url($value);
-            Storage::disk('google')->delete($value);
+
+    Route::get('/upload/{user_id}', function($user_id) {
+
+        $user = Users::find($user_id);
+
+            if(is_null($user)){
+                return response()->json(['error'=>true,'message'=>'Not Found'],404);
+            }
+
+        $files = Storage::disk('google')->files();
+        
+        foreach ($files as $value) {
+            $detail = Storage::disk('google')->getMetadata($value);
+            if($detail['filename'] === $user_id){
+                $url = Storage::disk('google')->url($value);
+                return response()->json(['user_id'=>(int) $user_id,'dowloand'=>$url],200);
+            }
         }
-    }
+    
+    });
 
+    Route::put('/upload/{user_id}', function(Request $request,$user_id) {
+
+        $user = Users::find($user_id);
+
+        if(is_null($user)){
+            return response()->json(['error'=>true,'message'=>'Not Found'],404);
+        }
+
+        $file = $request->file('avatar');
+
+        if(is_null($file)){
+            return response()->json(['error'=>true,'message'=>'Bad request'],400);
+        }
+
+        $mimeType = $file->getClientMimetype();
+
+        if( str_starts_with  ( $mimeType,'image') !== true){
+            return response()->json(['error'=>true, 'message' => 'bad request'],400);
+        }
+
+        $files = Storage::disk('google')->files();
+        foreach ($files as $value) {
+            $detail = Storage::disk('google')->getMetadata($value);
+            if($detail['filename'] === $user_id){
+                
+                Storage::disk('google')->delete($value);
+            }
+        }
+
+        $filename =  $request->avatar->getClientOriginalName();
+        $id = $user_id;
+        $path = $request->file('avatar')->storeAs(
+        'avatars', $id, 'public');
+
+        Storage::disk('google')->put($id, file_get_contents(__DIR__ . '\..\storage\app\public\avatars\\' . $id));
+        Storage::disk('public')->delete('avatars\\' . $id);
+
+        return response()->json(['user_id'=>(int) $user_id,'filename'=>$filename],200);
+        
+    });
+
+    Route::delete('/upload/{user_id}', function($user_id) {
+
+        $user = Users::find($user_id);
+
+            if(is_null($user)){
+                return response()->json(['error'=>true,'message'=>'Not Found'],404);
+            }
+
+        $files = Storage::disk('google')->files();
+        foreach ($files as $value) {
+            $detail = Storage::disk('google')->getMetadata($value);
+            if($detail['filename'] === $user_id){
+                
+                Storage::disk('google')->delete($value);
+                return response()->json(['message'=>'deleted'],200);
+            }
+        }
+
+    });
 });
-});
+
+
+
+
+// Route::post('/upload', function(Request $request) {
+
+//        dd($request->file());
+
+//         // $filename =  $request->avatar->getClientOriginalName();
+//         // $id = $request->user_id;
+//         // $path = $request->file('avatar')->storeAs(
+//         // 'avatars', $id, 'public');
+//         // // dd($request->file('avatar'));
+       
+//         // Storage::disk('google')->put($id, file_get_contents(__DIR__ . '\..\storage\app\public\avatars\\' . $id));
+//         // Storage::disk('public')->delete('avatars\\' . $id);
+//         // return response()->json(['user_id'=>$id,'name'=>$filename],201);
+
+    
+//  });
 
 Route::apiResource('messages_types','App\Http\Controllers\MessageTypeController')->names('messages_type');
 
@@ -120,4 +192,7 @@ Route::group([
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
         
 });
+
+
+
 

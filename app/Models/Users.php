@@ -19,9 +19,12 @@ class Users extends Model
       'user_phone',
       'email_verified_at',
       'user_email',
-      'password',
-      'remember_token',
       'created_at',
       'updated_at',
   ];
+
+  protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

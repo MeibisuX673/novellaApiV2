@@ -42,7 +42,7 @@ class AdminController extends Controller
             'admin_name'=>'required|min:3',
             'admin_phone'=>'required|min:11|max:11|unique:admins,admin_phone',
             'admin_email'=>'required|unique:admins,admin_email',
-            'password'=> 'required|min:8'
+            
         ];
 
         $validator = Validator::make($request->all(),$rules);
@@ -52,7 +52,7 @@ class AdminController extends Controller
 
         $admin = Admins::create(array_merge(
                     $validator->validated(),
-                    ['password' => bcrypt($request->password),
+                    [
                     'admin_phone' => bcrypt($request->admin_phone),
                     'admin_email'=>bcrypt($request->admin_email),]
                 ));

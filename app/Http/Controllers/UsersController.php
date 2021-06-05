@@ -21,14 +21,17 @@ class UsersController extends Controller
         return response()->json(Users::query()->paginate(2),200);
     }
 
-    public function showUserByEmail(Request $request){
+    public function checkAuthorize(Request $request){
         $user = DB::table('user')->where('user_email',$request->user_email)->first();
 
         if(is_null($user)){
             return response()->json(['error'=>true,'message'=>'Not Found'],404);
         }
+        if(bcrypt($request->password) !== $user->password){
+            return response()->json(['error'=>true,'message'=>'Not Found','authorized' => false],404);
+        }
 
-        return response()->json($user);
+        return response()->json(['user_id'=>(int) $user->user_id,'authorized' => true]);
      
     }
 

@@ -2,11 +2,11 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Novella Api",
-    "version": "0.1.9"
+    "version": "0.1.1"
   },
   "servers": [
     {
-      "url": "http://100.24.206.177:3000/api/v1"
+      "url": "http://127.0.0.1:8000/api/v1"
     }
   ],
   "tags": [
@@ -177,10 +177,6 @@
                   "admin_email": {
                     "type": "string",
                     "format": "email"
-                  },
-                  "password": {
-                    "type": "string",
-                    "format": "password"
                   }
                 }
               }
@@ -569,6 +565,200 @@
         }
       }
     },
+    "/upload": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Upload avatar.",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "string",
+                    "format": "integer"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "format": "base64"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "A avatar uploated"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/upload/{user_id}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Return avatar.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "user id",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return dowloand avatar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "dowloand": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update avatar.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "user id",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "base64"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated avatar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "filename": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete avatar.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "user id",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted avatar"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
     "/users/check": {
       "get": {
         "security": [
@@ -590,6 +780,10 @@
                   "user_email": {
                     "type": "string",
                     "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
                   }
                 }
               }
@@ -607,34 +801,8 @@
                     "user_id": {
                       "type": "integer"
                     },
-                    "user_name": {
-                      "type": "string"
-                    },
-                    "user_phone": {
-                      "type": "string"
-                    },
-                    "email_verified_at": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "user_email": {
-                      "type": "string",
-                      "format": "email"
-                    },
-                    "password": {
-                      "type": "string",
-                      "format": "password"
-                    },
-                    "remember_token": {
-                      "type": "string"
-                    },
-                    "created_at": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updated_at": {
-                      "type": "string",
-                      "format": "date-time"
+                    "authorized": {
+                      "type": "boolean"
                     }
                   }
                 }
