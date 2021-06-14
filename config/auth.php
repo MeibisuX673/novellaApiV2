@@ -17,6 +17,8 @@ return [
         'guard' => 'api',
         'passwords' => 'users',
     ],
+    
+
 
     /*
     |--------------------------------------------------------------------------
@@ -46,6 +48,11 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'apiUser' => [
+            'driver' => 'jwt',
+            'provider' => 'user',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -69,6 +76,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'user' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Users::class,
         ],
 
         // 'users' => [
