@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Users;
 use Validator;
+use App\Models\MainRoleIntermediary;
+use App\Models\MainRole;
 
 
 class AuthUserController extends Controller
@@ -38,6 +40,7 @@ class AuthUserController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
+       
         if (!$token = auth('apiUser')->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
@@ -65,10 +68,14 @@ class AuthUserController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
         
+        $role = MainRole::select('id')->where('main_role_name',"User")->first();
+        
         $user = Users::create(array_merge(
                     $validator->validated(),
-                    ['password' => bcrypt($request->password)]
+                    ['password' => bcrypt($request->password), 'user_email'=>$request->user_email,'user_phone'=> $request->user_phone]
                 ));
+
+        MainRoleIntermediary::create(['role_id' => $role['id'] ,'user_id'=> $user->user_id] );
 
         return response()->json([
             'message' => 'User successfully registered',
@@ -118,7 +125,7 @@ class AuthUserController extends Controller
         return response()->json([            'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('apiUser')->factory()->getTTL() * 60,
-            'user' => auth()->user()
+            'user' => auth('apiUser')->user()
         ]);
     }
 

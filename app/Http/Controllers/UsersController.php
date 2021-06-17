@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\Users;
+use App\Models\Admins;
 use Validator;
 use Illuminate\Support\Facades\DB;
 
@@ -21,49 +22,13 @@ class UsersController extends Controller
         return response()->json(Users::query()->paginate(2),200);
     }
 
-    public function checkAuthorize(Request $request){
-        $user = DB::table('user')->where('user_email',$request->user_email)->first();
-
-        if(is_null($user)){
-            return response()->json(['error'=>true,'message'=>'Not Found'],404);
-        }
-        if(bcrypt($request->password) !== $user->password){
-            return response()->json(['error'=>true,'message'=>'Not Found','authorized' => false],404);
-        }
-
-        return response()->json(['user_id'=>(int) $user->user_id,'authorized' => true]);
-     
-    }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-    	$rules = [
-    		'user_name'=>'required|string|max:25',
-    		'user_phone'=>'required|min:11|max:11|unique:user,user_phone',
-    		'user_email'=>'email|required|min:10|unique:user,user_email',
-    		'password'=>'required|min:8',
-            'remember_token' =>'boolean',
-
-    	];
-
-    	$validator = Validator::make($request->all(),$rules);
-    	if($validator->fails()){
-    		return response()->json($validator->errors(),400);
-    	}
-
-        $user = Users::create(array_merge(
-                    $validator->validated(),
-                    ['password' => bcrypt($request->password),
-                    'user_email'=> bcrypt($request->user_email),'user_phone'=> bcrypt($request->user_phone)]
-                ));
-        return response()->json($user,201);
-    }
+    
 
     /**
      * Display the specified resource.
@@ -77,7 +42,7 @@ class UsersController extends Controller
     	if(is_null($user)){
     		return response()->json(['error'=>true,'message'=>'Not Found'],404);
     	}
-        return response()->json($user,200);
+        return response()->json(['user_id'=>$user['user_id'],'user_name'=>$user['user_name']],200);
     }
 
 
@@ -88,15 +53,26 @@ class UsersController extends Controller
      * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
+        $user = Auth::user();
+        $userCheck = Users::find($id);
+        if(is_null($userCheck)){
+            return response()->json(['error'=>true,'message'=>'Not Found'],404);
+        }
+
+       
+        //return response()->json([$user['user_id'],$id]);
+        if($user['user_id'] !== $userCheck['user_id']){
+            return response()->json(['error'=>true,'message'=>'Forbidden'],403);
+        }
         
-  
+
     	$rules = [
     		
     		'user_name'=>'string|max:25',
-    		'user_phone'=>'min:11|max:11|unique:users,user_phone',
-    		'user_email'=>'email|min:10|unique:users,user_email',
+    		'user_phone'=>'min:11|max:11|unique:user,user_phone',
+    		'user_email'=>'email|min:10|unique:user,user_email',
     		'password'=>'min:8',
     	];
 
@@ -105,13 +81,17 @@ class UsersController extends Controller
     		return response()->json($validator->errors(),400);
     	}
 
-    	$user = Users::find($id);
-    	if(is_null($user)){
-        	return response()->json(['error'=>true,'message'=>'Not Found'],404);
+        $admins = Admins::select('id')->where('admin_id', $user['user_id'])->get();
+
+        if(!empty($admins)){
+            foreach ($admins as $value) {
+                $admin = Admins::find($value->id);
+                $admin->update($request->all());
+            }
         }
-    	
-    	$user->update($request->all());
-        return response()->json($user,200);
+        //return response()->json($request->user_email);
+    	$userCheck->update($request->all());
+        return response()->json($userCheck,200);
 
     }
 
@@ -123,6 +103,7 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
+        
         $user = Users::find($id);
         if(is_null($user)){
         	return response()->json(['error'=>true,'message'=>'Not Found'],404);

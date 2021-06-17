@@ -51,11 +51,7 @@ class AdminController extends Controller
         }
 
         $admin = Admins::create(array_merge(
-                    $validator->validated(),
-                    [
-                    'admin_phone' => bcrypt($request->admin_phone),
-                    'admin_email'=>bcrypt($request->admin_email),]
-                ));
+                    $validator->validated( )));
         return response()->json($admin,201);
     }
 

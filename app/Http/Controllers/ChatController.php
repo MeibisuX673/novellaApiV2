@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
+use App\Models\Server;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class ChatController extends Controller
@@ -34,13 +36,18 @@ class ChatController extends Controller
             'server_id'=>'required|integer',
             'chat_name'=>'required|min:3',
         ];
-
+        
         $validator = Validator::make($request->all(),$rules);
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
 
-        $chat = Chat::create($request->all());
+        $user = Auth::user();
+        $server = Server::find($request->server_id);
+        if($user['user_id'] !== $server['admin_id']){
+            return response()->json(['error'=>true,'message'=>'Forbidden'],403);
+        }
+        $chat = Chat::create(['chat_name' => $request->chat_name, 'server_id' => $request->server_id]);
         return response()->json($chat,201);
     }
 

@@ -4,7 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthUserController;
+use App\Http\Controllers\MainRoleIntermediaryController;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Users;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +23,10 @@ use App\Models\Users;
 
 
 Route::group([
-    'middleware' => 'auth:api'
+    'middleware' => 'auth:apiUser'
 ], function () {
+
+    Route::post('/giveRole',[MainRoleIntermediaryController::class, 'store']);
 
     Route::apiResource('admins','App\Http\Controllers\AdminController')->names('admin');
 
@@ -29,7 +34,9 @@ Route::group([
 
     Route::get('/user_intermediaries/showUsersByServerId/{server_id}',"App\Http\Controllers\UserIntermediariesController@showServerId");
 
-    Route::get('/user_intermediaries/showServersByUserId/{user_id}',"App\Http\Controllers\UserIntermediariesController@showUserId");
+    Route::get('/user_intermediaries/showServersByUserId',"App\Http\Controllers\UserIntermediariesController@showUserId");
+
+    Route::post('/user_intermediaries',"App\Http\Controllers\UserIntermediariesController@store");
 
     Route::get('users/check',"App\Http\Controllers\UsersController@checkAuthorize");
 
@@ -43,7 +50,7 @@ Route::group([
 
     Route::post('/upload', function(Request $request) {
 
-        $user = Users::find($request->user_id);
+        $user = Auth::user();
 
         if(is_null($user)){
             return response()->json(['error'=>true,'message'=>'Not Found'],404);
@@ -61,7 +68,7 @@ Route::group([
             }
 
         $filename =  $request->avatar->getClientOriginalName();
-        $id = $request->user_id;
+        $id = $user['user_id'];
         $path = $file->storeAs(
         'avatars', $id, 'public');
         // dd($request->file('avatar'));
@@ -135,9 +142,9 @@ Route::group([
         
     });
 
-    Route::delete('/upload/{user_id}', function($user_id) {
+    Route::delete('/upload', function() {
 
-        $user = Users::find($user_id);
+        $user = Auth::user();
 
             if(is_null($user)){
                 return response()->json(['error'=>true,'message'=>'Not Found'],404);
@@ -146,7 +153,7 @@ Route::group([
         $files = Storage::disk('google')->files();
         foreach ($files as $value) {
             $detail = Storage::disk('google')->getMetadata($value);
-            if($detail['filename'] === $user_id){
+            if($detail['filename'] === $user['user_id']){
                 
                 Storage::disk('google')->delete($value);
                 return response()->json(['message'=>'deleted'],200);

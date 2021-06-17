@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Server;
+use App\Models\Admins;
+use App\Models\UserIntermediary;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ServerController extends Controller
 {
@@ -29,17 +32,23 @@ class ServerController extends Controller
      */
     public function store(Request $request)
     {
+
         $rules = [
             'server_name'=>'required|min:3|string',
-            'admin_id'=>'required|integer',
         ];
 
         $validator = Validator::make($request->all(),$rules);
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
+        $user = Auth::user();
 
-        $server = Server::create($request->all());
+        Admins::create(['admin_id' => $user['user_id'],'admin_name' => $user['user_name'], 'admin_phone' => $user['user_phone'],'admin_email'=> $user['user_email']]);
+
+        $server = Server::create(['server_name'=>$request->server_name, 'server_description' => $request->server_description, 'admin_id' => $user['user_id']] );
+
+        UserIntermediary::create(['user_id'=>$user['user_id'], 'server_id'=>$server['server_id']]);
+
         return response()->json($server,201);
     }
 
@@ -71,17 +80,20 @@ class ServerController extends Controller
     {
         $rules = [
            'server_name'=>'min:3|string',
-            'admin_id'=>'integer',
+            'server_description'=>'string',
         ];
 
         $validator = Validator::make($request->all(),$rules);
         if($validator->fails()){
             return response()->json($validator->errors(),400);
         }
-
+        $user = Auth::user();
         $server = Server::find($id);
         if(is_null($server)){
             return response()->json(['error'=>true,'message'=>'Not Found'],404);
+        }
+        if($user['user_id'] !== $server['admin_id']){
+            return response()->json(['error'=>true,'message'=>'Forbidden'],403);
         }
         
         $server->update($request->all());
@@ -98,8 +110,13 @@ class ServerController extends Controller
     public function destroy($id)
     {
         $server = Server::find($id);
+
         if(is_null($server)){
             return response()->json(['error'=>true,'message'=>'Not Found'],404);
+        }
+        $user = Auth::user();
+        if($user['user_id'] !== $server['admin_id']){
+            return response()->json(['error'=>true,'message'=>'Forbidden'],403);
         }
         $server->delete();
        
