@@ -75,8 +75,8 @@ Route::group([
         $path = $file->storeAs(
         'avatars', $id, 'public');
         // dd($request->file('avatar'));
-       
-        Storage::disk('google')->put($id, file_get_contents(__DIR__ . '\..\storage\app\public\avatars\\' . $id));
+        
+        Storage::disk('google')->put($id, file_get_contents($path) ));
         Storage::disk('public')->delete('avatars\\' . $id);
         return response()->json(['user_id'=>$id,'name'=>$filename],201);
 
@@ -138,7 +138,7 @@ Route::group([
         $path = $request->file('avatar')->storeAs(
         'avatars', $id, 'public');
 
-        Storage::disk('google')->put($id, file_get_contents(__DIR__ . '\..\storage\app\public\avatars\\' . $id));
+        Storage::disk('google')->put($id, file_get_contents($path));
         Storage::disk('public')->delete('avatars\\' . $id);
 
         return response()->json(['user_id'=>(int) $user_id,'filename'=>$filename],200);
