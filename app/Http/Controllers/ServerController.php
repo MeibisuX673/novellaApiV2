@@ -8,6 +8,7 @@ use App\Models\UserIntermediary;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ServerController extends Controller
 {
@@ -78,6 +79,10 @@ class ServerController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        
+
+
         $rules = [
            'server_name'=>'min:3|string',
             'server_description'=>'string',
@@ -92,6 +97,7 @@ class ServerController extends Controller
         if(is_null($server)){
             return response()->json(['error'=>true,'message'=>'Not Found'],404);
         }
+        
         if($user['user_id'] !== $server['admin_id']){
             return response()->json(['error'=>true,'message'=>'Forbidden'],403);
         }

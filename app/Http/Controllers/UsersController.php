@@ -82,15 +82,20 @@ class UsersController extends Controller
     	}
 
         $admins = Admins::select('id')->where('admin_id', $user['user_id'])->get();
-
+        $userCheck->update($request->all());
+        $userCheck = Users::find($id);
+        
         if(!empty($admins)){
             foreach ($admins as $value) {
                 $admin = Admins::find($value->id);
-                $admin->update($request->all());
+                
+                
+                
+                $admin->update(['admin_name'=>$userCheck['user_name'],'admin_phone'=>$userCheck['user_phone'],'admin_email'=>$userCheck['user_email']]);
             }
         }
         //return response()->json($request->user_email);
-    	$userCheck->update($request->all());
+    	
         return response()->json($userCheck,200);
 
     }

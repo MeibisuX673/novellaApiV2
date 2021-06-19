@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Admins extends Model
 {
     protected $table = 'admins';
-    protected $primaryKey = 'admin_id';
+    protected $primaryKey = 'id';
 
     public $timestamps = true;
 

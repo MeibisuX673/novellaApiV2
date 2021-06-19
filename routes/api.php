@@ -186,7 +186,7 @@ Route::group([
 Route::apiResource('messages_types','App\Http\Controllers\MessageTypeController')->names('messages_type');
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => 'auth:apiUser',
     
     'prefix' => 'auth'
 
