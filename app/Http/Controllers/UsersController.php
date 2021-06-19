@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Users;
 use App\Models\Admins;
 use Validator;
+use App\Models\UserIntermediary;
+use App\Models\MainRoleIntermediary;
 use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
@@ -108,13 +110,47 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        
-        $user = Users::find($id);
-        if(is_null($user)){
-        	return response()->json(['error'=>true,'message'=>'Not Found'],404);
+        $user = Auth::user();
+        $userCheck = Users::find($id);
+
+        if(is_null($userCheck)){
+            return response()->json(['error'=>true,'message'=>'Not Found'],404);
         }
-        $user->delete();
+
+        if($user['user_id'] !== $userCheck['user_id']){
+            return response()->json(['error'=>true,'message'=>'Forbidden'],403);
+        }
+        $admins = Admins::select('id')->where('admin_id',$user['user_id'])->get();
+
+        if(!empty($admins)){
+            foreach($admins as $value){
+                $admin = Admins::find($value->id);
+                $admin->delete();
+            }
+        }    
+
+        $MainRoleIntermediary = MainRoleIntermediary::select('id')->where('user_id', $user['user_id'])->get();
+
+        if(!empty($MainRoleIntermediary)){
+            foreach($MainRoleIntermediary as $value){
+                $Intermediary = MainRoleIntermediary::find($value->id);
+                $Intermediary->delete();
+            }
+        }    
+
+        $userIntermediary = UserIntermediary::select('id')->where('user_id',$user['user_id'])->get();
+        if(!empty($userIntermediary)){
+            foreach($userIntermediary as $value){
+                $Intermediary = UserIntermediary::find($value->id);
+                $Intermediary->delete();
+            }
+            
+        }
+        
+        
+        $userCheck->delete();
        
-        return response()->json('',200);
+        return response()->json('deleted',200);
     }
+
 }

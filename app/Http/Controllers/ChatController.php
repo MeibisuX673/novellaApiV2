@@ -87,6 +87,16 @@ class ChatController extends Controller
             return response()->json($validator->errors(),400);
         }
 
+        $user = Auth::user();
+        $server = Server::find($request->server_id);
+        if(is_null($server)){
+            return response()->json(['error'=>true,'message'=>'Not Found'],404);
+        }
+        
+        if($user['user_id'] !== $server['admin_id']){
+            return response()->json(['error'=>true,'message'=>'Forbidden'],403);
+        }
+
         $chat = Chat::find($id);
         if(is_null($chat)){
             return response()->json(['error'=>true,'message'=>'Not Found'],404);
@@ -104,10 +114,19 @@ class ChatController extends Controller
      */
     public function destroy($id)
     {
+
         $chat = Chat::find($id);
         if(is_null($chat)){
             return response()->json(['error'=>true,'message'=>'Not Found'],404);
         }
+
+        $user = Auth::user();
+        $server = Server::find($chat['server_id'])
+        
+        if($user['user_id'] !== $server['admin_id']){
+            return response()->json(['error'=>true,'message'=>'Forbidden'],403);
+        }
+
         $chat->delete();
        
         return response()->json('',204);

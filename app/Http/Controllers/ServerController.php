@@ -80,8 +80,6 @@ class ServerController extends Controller
     public function update(Request $request, $id)
     {
 
-        
-
 
         $rules = [
            'server_name'=>'min:3|string',

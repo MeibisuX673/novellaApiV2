@@ -120,7 +120,7 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-         $admin = Admins::find($id);
+        $admin = Admins::find($id);
         if(is_null($admin)){
             return response()->json(['error'=>true,'message'=>'Not Found'],404);
         }
