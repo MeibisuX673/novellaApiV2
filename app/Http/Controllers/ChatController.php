@@ -66,6 +66,19 @@ class ChatController extends Controller
         return response()->json($chat,200);
     }
 
+    public function showServerId($server_id){
+        $chatList = [];
+        $user = Auth::user();
+        $server = Server::find($server_id);
+        $chats = Chat::select('chat_id')->where('server_id',$server['server_id'])->get();
+        foreach($chats as $value){
+            $chatList[] = Chat::find($value->chat_id);
+        }
+        
+        return response()->json(['server_id' =>$server['server_id'], 'chats'=>$chatList]);
+    }
+
+
   
 
     /**
@@ -121,7 +134,7 @@ class ChatController extends Controller
         }
 
         $user = Auth::user();
-        $server = Server::find($chat['server_id'])
+        $server = Server::find($chat['server_id']);
         
         if($user['user_id'] !== $server['admin_id']){
             return response()->json(['error'=>true,'message'=>'Forbidden'],403);

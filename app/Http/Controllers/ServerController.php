@@ -10,6 +10,7 @@ use Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
+
 class ServerController extends Controller
 {
     /**
@@ -53,6 +54,8 @@ class ServerController extends Controller
         return response()->json($server,201);
     }
 
+
+    
     /**
      * Display the specified resource.
      *

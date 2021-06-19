@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\MainRoleIntermediaryController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Users;
+use App\Http\Controllers\ChatController;
 
 
 /*
@@ -25,6 +26,8 @@ use App\Models\Users;
 Route::group([
     'middleware' => 'auth:apiUser'
 ], function () {
+
+    Route::get('/showChats/{server_id}',[ChatController::class, 'showServerId']);
 
     Route::post('/giveRole',[MainRoleIntermediaryController::class, 'store']);
 
