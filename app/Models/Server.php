@@ -19,4 +19,12 @@ class Server extends Model
     	'admin_id',
 
     ];
+
+    public function chats(){
+      return $this->hasMany('App\Models\Chat','server_id');
+    }
+    
+    public function users(){
+      return $this->hasMany('App\Models\UserIntermediary','server_id');
+    }
 }

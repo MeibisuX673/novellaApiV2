@@ -27,7 +27,7 @@ Route::group([
     'middleware' => 'auth:apiUser'
 ], function () {
 
-    Route::get('/showChats/{server_id}',[ChatController::class, 'showServerId']);
+    Route::get('/showChats/{server_id}',[ChatController::class, 'showChats']);
 
     Route::post('/giveRole',[MainRoleIntermediaryController::class, 'store']);
 
@@ -35,13 +35,13 @@ Route::group([
 
     Route::delete('/user_intermediaries/{user_id}/{server_id}',"App\Http\Controllers\UserIntermediariesController@destroy");
 
-    Route::get('/user_intermediaries/showUsersByServerId/{server_id}',"App\Http\Controllers\UserIntermediariesController@showServerId");
+    Route::get('/servers/showServers',"App\Http\Controllers\ServerController@showServers");
 
-    Route::get('/user_intermediaries/showServersByUserId',"App\Http\Controllers\UserIntermediariesController@showUserId");
+    Route::get('/servers/showUsers/{server_id}',"App\Http\Controllers\ServerController@showUsers");
 
     Route::post('/user_intermediaries',"App\Http\Controllers\UserIntermediariesController@store");
 
-    Route::get('users/check',"App\Http\Controllers\UsersController@checkAuthorize");
+    // Route::get('users/check',"App\Http\Controllers\UsersController@checkAuthorize");
 
     Route::apiResource('chats','App\Http\Controllers\ChatController')->names('chat');
 
@@ -75,7 +75,7 @@ Route::group([
         $path = $file->storeAs(
         'avatars', $id, 'public');
         // dd($request->file('avatar'));
-        $pathPublic = Storage::disk('public')
+        
         Storage::disk('google')->put($id, file_get_contents(__DIR__ . '/../storage/app/public/avatars/' . $id));
         Storage::disk('public')->delete('avatars/' . $id);
         return response()->json(['user_id'=>$id,'name'=>$filename],201);
@@ -188,21 +188,21 @@ Route::group([
 
 Route::apiResource('messages_types','App\Http\Controllers\MessageTypeController')->names('messages_type');
 
-Route::group([
-    'middleware' => 'auth:apiUser',
+// Route::group([
+//     'middleware' => 'auth:apiUser',
     
-    'prefix' => 'auth'
+//     'prefix' => 'auth'
 
-], function ($router) {
+// ], function ($router) {
 
 
-    Route::post('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);
+//     Route::post('/login', [AuthController::class, 'login'])->name('login');
+//     Route::post('/register', [AuthController::class, 'register']);
+//     Route::post('/logout', [AuthController::class, 'logout']);
+//     Route::post('/refresh', [AuthController::class, 'refresh']);
+//     Route::get('/user-profile', [AuthController::class, 'userProfile']);
         
-});
+// });
 
 
 Route::group([

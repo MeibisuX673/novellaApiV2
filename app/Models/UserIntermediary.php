@@ -22,4 +22,10 @@ class UserIntermediary extends Model
     	'created_at',
     	'updated_at',
     ];
+    public function server(){
+      return $this->belongsTo('App\Models\Server','server_id');
+    }
+    public function user(){
+      return $this->belongsTo('App\Models\Users','user_id');
+    }
 }

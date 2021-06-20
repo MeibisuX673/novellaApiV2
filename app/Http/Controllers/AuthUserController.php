@@ -74,7 +74,7 @@ class AuthUserController extends Controller
                     $validator->validated(),
                     ['password' => bcrypt($request->password), 'user_email'=>$request->user_email,'user_phone'=> $request->user_phone]
                 ));
-
+        return response()->json($user);
         MainRoleIntermediary::create(['role_id' => $role['id'] ,'user_id'=> $user->user_id] );
 
         return response()->json([
@@ -101,7 +101,7 @@ class AuthUserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function refresh() {
-        return $this->createNewToken(auth()->refresh());
+        return $this->createNewToken(auth('apiUser')->refresh());
     }
 
     /**
@@ -110,7 +110,7 @@ class AuthUserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function userProfile() {
-        return response()->json(auth()->user());
+        return response()->json(auth('apiUser')->user());
     }
 
     /**

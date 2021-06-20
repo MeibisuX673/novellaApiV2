@@ -14,9 +14,6 @@
       "name": "Auth_user"
     },
     {
-      "name": "Admin"
-    },
-    {
       "name": "User"
     },
     {
@@ -38,7 +35,7 @@
   "paths": {
     "/auth.user/login": {
       "post": {
-        "summary": "Auth user Api.",
+        "summary": "Login user.",
         "tags": [
           "Auth_user"
         ],
@@ -74,7 +71,7 @@
     },
     "/auth.user/register": {
       "post": {
-        "summary": "Auth user Api.",
+        "summary": "Register user.",
         "tags": [
           "Auth_user"
         ],
@@ -116,7 +113,7 @@
     },
     "/auth.user/logout": {
       "post": {
-        "summary": "Logout user Api.",
+        "summary": "Logout user.",
         "security": [
           {
             "bearerAuth": []
@@ -137,7 +134,7 @@
     },
     "/auth.user/refresh": {
       "post": {
-        "summary": "Refresh token user Api.",
+        "summary": "Refresh token user.",
         "security": [
           {
             "bearerAuth": []
@@ -158,7 +155,7 @@
     },
     "/auth.user/user-profile": {
       "get": {
-        "summary": "Refresh token user Api.",
+        "summary": "Refresh token user.",
         "security": [
           {
             "bearerAuth": []
@@ -173,256 +170,6 @@
           },
           "401": {
             "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/admins": {
-      "get": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Return admins list.",
-        "operationid": "login",
-        "tags": [
-          "Admin"
-        ],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "required": true,
-            "description": "number of page.",
-            "example": 1,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/admins/{admin_id}": {
-      "get": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Return admin by id.",
-        "tags": [
-          "Admin"
-        ],
-        "parameters": [
-          {
-            "name": "admin_id",
-            "in": "path",
-            "required": true,
-            "description": "admin id",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "admin_id": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 4
-                    },
-                    "admin_name": {
-                      "type": "string",
-                      "example": "Smith"
-                    },
-                    "admin_phone": {
-                      "type": "string",
-                      "example": 12345678989
-                    },
-                    "admin_email": {
-                      "type": "string",
-                      "example": "Smith@te.st"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not found"
-          }
-        }
-      },
-      "put": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Update admin by id.",
-        "tags": [
-          "Admin"
-        ],
-        "parameters": [
-          {
-            "name": "admin_id",
-            "in": "path",
-            "required": true,
-            "description": "admin id",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "admin_name": {
-                    "type": "string"
-                  },
-                  "admin_phone": {
-                    "type": "string"
-                  },
-                  "admin_email": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "admin_id": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 4
-                    },
-                    "admin_name": {
-                      "type": "string",
-                      "example": "Smith"
-                    },
-                    "admin_phone": {
-                      "type": "string",
-                      "example": 12345678989
-                    },
-                    "admin_email": {
-                      "type": "string",
-                      "example": "Smith@te.st"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not found"
-          }
-        }
-      },
-      "delete": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Delete admin by id.",
-        "tags": [
-          "Admin"
-        ],
-        "parameters": [
-          {
-            "name": "admin_id",
-            "description": "admin id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "admin_id": {
-                      "type": "integer",
-                      "format": "int64",
-                      "example": 4
-                    },
-                    "admin_name": {
-                      "type": "string",
-                      "example": "Smith"
-                    },
-                    "admin_phone": {
-                      "type": "string",
-                      "example": 12345678989
-                    },
-                    "admin_email": {
-                      "type": "string",
-                      "example": "Smith@te.st"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not found"
           }
         }
       }
@@ -819,6 +566,43 @@
             "description": "Not found"
           }
         }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete user by id.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": "user id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
       }
     },
     "/servers": {
@@ -855,73 +639,61 @@
             "description": "Unauthorized"
           }
         }
-      },
-      "post": {
+      }
+    },
+    "/servers/showServers": {
+      "get": {
         "security": [
           {
             "bearerAuth": []
           }
         ],
-        "summary": "Create server",
+        "summary": "Return servers list",
         "tags": [
           "Server"
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "server_name": {
-                    "type": "string"
-                  },
-                  "server_description": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "server_id": {
-                      "type": "integer",
-                      "format": "int64"
-                    },
-                    "server_name": {
-                      "type": "string"
-                    },
-                    "server_description": {
-                      "type": "string"
-                    },
-                    "admin_id": {
-                      "type": "string"
-                    },
-                    "created_at": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    },
-                    "updated_at": {
-                      "type": "string",
-                      "format": "date-time",
-                      "nullable": true
-                    }
-                  }
-                }
-              }
-            }
+            "description": "OK"
           },
           "400": {
-            "description": "Bad request"
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/servers/showUsers/{server_id}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Return users list by server_id",
+        "tags": [
+          "Server"
+        ],
+        "parameters": [
+          {
+            "name": "server_id",
+            "description": "server id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -1034,10 +806,6 @@
                   },
                   "server_description": {
                     "type": "string"
-                  },
-                  "admin_id": {
-                    "type": "integer",
-                    "format": "int64"
                   }
                 }
               }
@@ -1087,6 +855,9 @@
           "401": {
             "description": "Unauthorized"
           },
+          "403": {
+            "description": "Fobiden"
+          },
           "404": {
             "description": "Not found"
           }
@@ -1121,6 +892,9 @@
           "401": {
             "description": "Unauthorized"
           },
+          "403": {
+            "description": "Fobidden"
+          },
           "404": {
             "description": "Not found"
           }
@@ -1134,7 +908,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update chat by id",
+        "summary": "Return list chats",
         "tags": [
           "Chat"
         ],
@@ -1143,7 +917,7 @@
             "name": "server_id",
             "in": "path",
             "required": true,
-            "description": "chat id",
+            "description": "server id",
             "schema": {
               "type": "integer",
               "format": "int64"
@@ -1206,40 +980,6 @@
       }
     },
     "/chats": {
-      "get": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Return chats list",
-        "tags": [
-          "Chat"
-        ],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "path",
-            "required": true,
-            "description": "number of page.",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      },
       "post": {
         "security": [
           {
@@ -1307,6 +1047,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Fobidden"
           }
         }
       }
@@ -1318,7 +1061,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Create chat",
+        "summary": "Return the chat",
         "tags": [
           "Chat"
         ],
@@ -1405,10 +1148,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "server_id": {
-                    "type": "integer",
-                    "format": "in64"
-                  },
                   "chat_name": {
                     "type": "string"
                   }
@@ -1457,6 +1196,9 @@
           "401": {
             "description": "Unauthorized"
           },
+          "403": {
+            "description": "Fobidden"
+          },
           "404": {
             "description": "Not found"
           }
@@ -1490,6 +1232,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Fobidden"
           },
           "404": {
             "description": "Not found"
@@ -1690,6 +1435,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       }
@@ -1850,159 +1598,6 @@
         },
         "404": {
           "description": "Not found"
-        }
-      }
-    },
-    "/user_intermediaries/showUsersByServerId/{server_id}": {
-      "get": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Return users id list by server id",
-        "tags": [
-          "User intermediary"
-        ],
-        "parameters": [
-          {
-            "name": "server_id",
-            "in": "path",
-            "required": true,
-            "description": "server id",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "server_id": {
-                      "type": "integer",
-                      "format": "int64"
-                    },
-                    "users": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "user_id": {
-                            "type": "integer"
-                          },
-                          "user_name": {
-                            "type": "string"
-                          },
-                          "user_phone": {
-                            "type": "string"
-                          },
-                          "user_email": {
-                            "type": "string",
-                            "format": "email"
-                          },
-                          "password": {
-                            "type": "string",
-                            "format": "password"
-                          },
-                          "remember_token": {
-                            "type": "string"
-                          },
-                          "created_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          },
-                          "updated_at": {
-                            "type": "string",
-                            "format": "date-time"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not found"
-          }
-        }
-      }
-    },
-    "/user_intermediaries/showServersByUserId": {
-      "get": {
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Return servers id list by user id",
-        "tags": [
-          "User intermediary"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "user_id": {
-                      "type": "integer",
-                      "format": "int64"
-                    },
-                    "servers": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "server_id": {
-                            "type": "integer",
-                            "format": "int64"
-                          },
-                          "server_name": {
-                            "type": "string"
-                          },
-                          "server_description": {
-                            "type": "string"
-                          },
-                          "admin_id": {
-                            "type": "string"
-                          },
-                          "created_at": {
-                            "type": "string",
-                            "format": "date-time",
-                            "nullable": true
-                          },
-                          "updated_at": {
-                            "type": "string",
-                            "format": "date-time",
-                            "nullable": true
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not found"
-          }
         }
       }
     },

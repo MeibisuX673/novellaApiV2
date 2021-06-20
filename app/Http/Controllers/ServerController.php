@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Server;
 use App\Models\Admins;
+use App\Models\Users;
 use App\Models\UserIntermediary;
 use Illuminate\Http\Request;
 use Validator;
@@ -69,6 +70,52 @@ class ServerController extends Controller
             return response()->json(['error'=>true,'message'=>'Not Found'],404);
         }
         return response()->json($server,200);
+    }
+
+    public function showServers(){
+        $servers = [];
+        $user = Auth::user();
+        
+
+        $userIntermediary = $user->servers;
+        // $userIntermediary = DB::table('user_intermediaries')->select('server_id')->where('user_id',$user['user_id'])->get();
+        if(is_null($userIntermediary)){
+            return response()->json(['error'=>true,'message'=>'Not Found servers'],404);
+        }
+         foreach ($userIntermediary as $value) {
+            $servers[] = Server::find($value->server_id); 
+        }
+        
+        $user = Auth::user();
+        return response()->json(['user_id' =>$user['user_id'], 'servers'=>$servers]);
+    }
+
+    public function showUsers($server_id){
+       
+        $users = [];
+        $server = Server::find($server_id);
+        if(is_null($server)){
+            return response()->json(['error'=>true,'message'=>'Not Found'],404);
+        }
+        $user = Auth::user();
+
+        $servers = $user->servers()->where('server_id',$server_id)->first();  
+
+        if(is_null($servers))
+        {
+            return response()->json(['error'=>true,'message'=>'Forbidden'],403);
+        } 
+        
+        $userIntermediary = $server->users;
+
+        foreach ($userIntermediary as $value) {
+            $users[] = Users::find($value->user_id);
+            // $servers[] = DB::table('servers')->select()->whereJsonContains('user_id', )
+        }
+        $server = Server::find($server_id);
+        return response()->json(['server_id' =>$server_id, 'users'=>$users]);  
+    // return response()->json(['user_id' => $userIntermediary]);
+
     }
 
 

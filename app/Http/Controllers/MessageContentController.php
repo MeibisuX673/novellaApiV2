@@ -91,6 +91,7 @@ class MessageContentController extends Controller
      */
     public function show($id)
     {
+        
         $messageContent = MessageContent::find($id);
         if(is_null($messageContent)){
             return response()->json(['error'=>true,'message'=>'Not Found'],404);

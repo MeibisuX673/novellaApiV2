@@ -17,4 +17,7 @@ class Chat extends Model
     	'server_id',
     	'chat_name',
     ];
+    public function server(){
+      return $this->belongsTo('App\Models\server','server_id');
+    }
 }

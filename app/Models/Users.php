@@ -62,4 +62,8 @@ class Users extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function servers(){
+      return $this->hasMany('App\Models\UserIntermediary','user_id');
+    }
 }
